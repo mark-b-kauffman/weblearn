@@ -1,3 +1,5 @@
+# Code from https://github.com/mdeakyne/BbRest
+# See included BBREST_LICENSE
 import maya
 import requests
 from requests.models import Response
