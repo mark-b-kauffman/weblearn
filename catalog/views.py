@@ -3,7 +3,7 @@ from bbrest import BbRest
 from config import adict
 
 KEY = adict['learn_rest_key']
-SECRET = adict['learn_rest_key']
+SECRET = adict['learn_rest_secret']
 LEARNFQDN = adict['learn_rest_fqdn']
 # Create your views here.
 

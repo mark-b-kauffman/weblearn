@@ -25,7 +25,7 @@ SECRET_KEY = 'ms87aks=o_e*^aznlcn+#xy^%u47ymryc23zb$git+7yp8x4^('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'www.avinyet.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'www.avinyet.com']
 
 
 # Application definition
