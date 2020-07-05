@@ -1,9 +1,10 @@
+README.txt are notes I take as I create. Less formal than a README.md.
+
 Python Environment
   deactivate
   source ~/.bashrc
   workon
   workon my_devcon_django
-
 
 Django Setup (Modify to use Python 3.7.x or 3.8.x and Django 3.x)
   https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django
