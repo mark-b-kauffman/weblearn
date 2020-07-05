@@ -1,46 +1,33 @@
-# BBDN-UEF-Python
+# BBDN-Web-Learn
 
-This project is set up to demonstrate the use of the Ultra Extension Framework with LTI 1.3 in Python.
+This project is set up to demonstrate making REST API calls from Django
 
 To configure:
 
-## configs/lti.json and configs/private.key
+## Install Python 3.7.x
 
-This [document](https://docs.blackboard.com/standards/PyLTI1p3WithBlackboardLearn.html) shows how to configure the PyLTI1.3 library, which is done through the `configs`directory.
+See https://docs.python.org/3.7/using/index.html
 
-## ConfigTemplate.py
+## Install Django 3.x
 
-Copy `ConfigTemplate.py` to `Config.py` and fill in your information:
+See https://docs.djangoproject.com/en/3.0/topics/install/
+
+## config_template.py
+
+Copy `config_template.py` to `config.py` and fill in your information:
 
 ```
-config = {
-    "verify_certs" : "True",
-    "learn_rest_url" : "YOURLEARNSERVERNOHTTPS",
-    "learn_rest_key" : "YOURLEARNRESTKEY",
-    "learn_rest_secret" : "YOURLEARNRESTSECRET",
-    "app_url" : "YOURAPPURLWITHHTTPS"
+adict = {
+    "learn_rest_fqdn" : "your.learnserver.net",
+    "learn_rest_key" : "Your REST API KEY GOES HERE NOT Mine",
+    "learn_rest_secret" : "Your REST API SECRET GOES HEREer",
 }
 
-courses = {
-    "_143_1" : "UEF Pilot Cohort"
-}
-
-courseIds = '_143_1'
-
-contents = {
-    "_3127_1" : "Demo the UEF Python Example"
-}
-
-contentIds = '_3127_1'
 ```
 
-* **learn_rest_url** should be set to your learn instances domain. Be sure to avoid the request scheme, i.e. `mylearn.blackboard.edu`
-* **app_url** should be set to the FQDN of your application, i.e. `https://myapp.herokuapp.com`
-* **courses** maps the course Pk1 to the title you wish to to assign it
-* **courseIds** is a comma-delimeted list of course ids to listen for events from
-* **contents** maps content pk1 values to the title you wish to assign it
-* **contentIds** is a comman-delimited list of content Ids to listen for events from
+* **learn_rest_fqdn** should be set to your learn instances domain. Be sure to avoid the request scheme, i.e. `mylearn.blackboard.edu`
+
 
 ## To Run
 
-First run `pip install -r requirements.txt`  and then `python app.py` or if you are using heroku, just check in the code to your dyno.
+First run `pip install -r requirements.txt`  and then `python manage.py runserver`
