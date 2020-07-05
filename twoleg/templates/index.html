@@ -6,7 +6,9 @@
   Web Learn demonstrates making REST API calls to Blackboard Learn(tm) from the Django web framework,
   using both 2-legged authentication and 3-legged authentication.
   <h2>Dynamic content</h2>
-  <p>This web application is connected to the following Blackboard Learn(tm) system:</p>
+  <p>Here, we made the only possible unauthenticated REST request 
+    /learn/api/public/v1/system/version to the following Blackboard Learn server
+    with the result shown below:</p>
   <ul>
     <li><strong>Learn Server:</strong> {{ learn_server }}</li>
     <li><strong>Version JSON:</strong> {{ version_json }}</li>

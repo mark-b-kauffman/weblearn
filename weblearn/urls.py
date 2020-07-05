@@ -20,17 +20,17 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 ]
 
-# Use include() to add paths from the catalog application 
+# Use include() to add paths from the twoleg application 
 from django.urls import include
 
 urlpatterns += [
-    path('catalog/', include('catalog.urls')),
+    path('twoleg/', include('twoleg.urls')),
 ]
 
-#Add URL maps to redirect the base URL, /, to our catalog application
+#Add URL maps to redirect the base URL, /, to our twoleg application
 from django.views.generic import RedirectView
 urlpatterns += [
-    path('', RedirectView.as_view(url='catalog/', permanent=True)),
+    path('', RedirectView.as_view(url='twoleg/', permanent=True)),
 ]
 
 # Use static() to add url mapping to serve static files during development (only)
