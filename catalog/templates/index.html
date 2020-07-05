@@ -1,12 +1,14 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>Local Library Home</h1>
-  <p>Welcome to LocalLibrary, a website developed by <em>Mozilla Developer Network</em>!</p>
+  <h1>Web Learn Home</h1>
+  <p>Welcome to Web Learn, a web application based on the Django tutorial at <a href="https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django"><em>Mozilla Developer Network</em></a></p>
+  Web Learn demonstrates making REST API calls to Blackboard Learn(tm) from the Django web framework,
+  using both 2-legged authentication and 3-legged authentication.
   <h2>Dynamic content</h2>
-  <p>The library contains the following:</p>
+  <p>This web application is connected to the following Blackboard Learn(tm) system:</p>
   <ul>
-    <li><strong>User Name:</strong> {{ your_name }}</li>
+    <li><strong>Learn Server:</strong> {{ learn_server }}</li>
     <li><strong>Version JSON:</strong> {{ version_json }}</li>
   </ul>
 {% endblock %}

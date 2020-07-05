@@ -12,9 +12,9 @@ def index(request):
     bb = BbRest(KEY, SECRET, f"https://{LEARNFQDN}" )
     resp = bb.GetVersion()
     version_json = resp.json()
-    uncle_name = "bob's your uncle"
+
     context = {
-        'uncle_name': uncle_name,
+        'learn_server': LEARNFQDN,
         'version_json' : version_json,
     }
 
