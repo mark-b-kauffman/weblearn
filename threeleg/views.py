@@ -21,14 +21,14 @@ def index(request):
     # Render the HTML template index.html with the data in the context variable
     return render(request, 'index.html', context=context)
 
-def getusers(request):
-    """View function for getusers page of site."""
+def whoami(request):
+    """View function for whoami page of site."""
     bb = BbRest(KEY, SECRET, f"https://{LEARNFQDN}" )
-    resp = bb.GetUsers()
+    resp = bb.GetUser("userName:mkauffman")
     user_json = resp.json()
     context = {
         'user_json': user_json,
     }
     print('views.py index(request) calling render...')
     # Render the HTML template index.html with the data in the context variable
-    return render(request, 'getusers.html', context=context)
+    return render(request, 'whoami.html', context=context)

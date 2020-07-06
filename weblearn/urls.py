@@ -27,6 +27,10 @@ urlpatterns += [
     path('twoleg/', include('twoleg.urls')),
 ]
 
+urlpatterns += [
+    path('threeleg/', include('threeleg.urls')),
+]
+
 #Add URL maps to redirect the base URL, /, to our twoleg application
 from django.views.generic import RedirectView
 urlpatterns += [
