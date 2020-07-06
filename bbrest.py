@@ -1,5 +1,6 @@
 # Code from https://github.com/mdeakyne/BbRest
 # See included BBREST_LICENSE
+# Kauffman - modified so I can get the access token.
 import maya
 import requests
 from requests.models import Response
@@ -27,6 +28,7 @@ class BbRest:
         self.__secret = secret
         self.__url = url
         self.__headers = headers
+        self.__token = ''
 
         #Authenticate the session
         session = requests.Session()
@@ -43,6 +45,7 @@ class BbRest:
         #Adds the token to the headers for future requests.
         if r.status_code == 200:
             token = r.json()["access_token"]
+            self.__token = token
             session.headers.update({"Authorization":f"Bearer {token}"})
             self.expiration_epoch = maya.now() + r.json()["expires_in"]
 
@@ -117,6 +120,7 @@ class BbRest:
             #Adds the token to the headers for future requests.
             if r.status_code == 200:
                 token = r.json()["access_token"]
+                self.__token = token
                 session.headers.update({"Authorization":f"Bearer {token}"})
                 self.expiration_epoch = maya.now() + r.json()["expires_in"]
                 self.user = r.json()['user_id']
@@ -143,6 +147,9 @@ class BbRest:
                 end = '3800'
 
         return start <= self.version < end
+
+    def get_token(self):
+        return self.__token
 
     def supported_functions(self):
         """
@@ -404,6 +411,7 @@ class BbRest:
 
         if r.status_code == 200:
             token = r.json()["access_token"]
+            self.__token = token
             self.session.headers.update({"Authorization":f"Bearer {token}"})
             self.expiration_epoch = maya.now() + r.json()["expires_in"]
 
