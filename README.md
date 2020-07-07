@@ -30,4 +30,5 @@ adict = {
 
 ## To Run
 
-First run `pip install -r requirements.txt`  and then `python manage.py runserver`
+First run `pip install -r requirements.txt` . Next run `python manage.py migrate` to apply the migrations. 
+And last, start the server with `python manage.py runserver`
