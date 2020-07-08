@@ -1,6 +1,8 @@
 # Code from https://github.com/mdeakyne/BbRest
 # See included BBREST_LICENSE
-# Kauffman - modified so I can get the access token.
+# Kauffman - MODIFIED so I can get the access token. Matt has since upgraded his repo so you don't
+# need to used this modified version. I'll be switching over to his published release after this commit.
+# I'm publishing this now because it works with the code I have in place with this commit.
 import maya
 import requests
 from requests.models import Response
@@ -28,7 +30,7 @@ class BbRest:
         self.__secret = secret
         self.__url = url
         self.__headers = headers
-        self.__token = ''
+        self.__token = '' #MBK Modified
 
         #Authenticate the session
         session = requests.Session()
@@ -45,7 +47,7 @@ class BbRest:
         #Adds the token to the headers for future requests.
         if r.status_code == 200:
             token = r.json()["access_token"]
-            self.__token = token
+            self.__token = token #MBK Modified
             session.headers.update({"Authorization":f"Bearer {token}"})
             self.expiration_epoch = maya.now() + r.json()["expires_in"]
 
@@ -120,7 +122,7 @@ class BbRest:
             #Adds the token to the headers for future requests.
             if r.status_code == 200:
                 token = r.json()["access_token"]
-                self.__token = token
+                self.__token = token #MBK Modified
                 session.headers.update({"Authorization":f"Bearer {token}"})
                 self.expiration_epoch = maya.now() + r.json()["expires_in"]
                 self.user = r.json()['user_id']
@@ -148,7 +150,7 @@ class BbRest:
 
         return start <= self.version < end
 
-    def get_token(self):
+    def get_token(self): #MBK Modified added this...
         return self.__token
 
     def supported_functions(self):
@@ -411,7 +413,7 @@ class BbRest:
 
         if r.status_code == 200:
             token = r.json()["access_token"]
-            self.__token = token
+            self.__token = token #MBK Modified
             self.session.headers.update({"Authorization":f"Bearer {token}"})
             self.expiration_epoch = maya.now() + r.json()["expires_in"]
 
@@ -461,10 +463,10 @@ class BbRest:
         return r.url
 
         
-
 def clean_kwargs(courseId=None, userId=None, columnId=None, groupId=None, **kwargs):
         if userId:
-            if userId[0] != '_' and ':' not in userId:
+            #MBK Modified. Added me.
+            if userId[0] != '_' and ':' not in userId and "me" != userId :
                 kwargs['userId'] = f'userName:{userId}'
 
             else:

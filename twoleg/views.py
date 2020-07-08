@@ -9,13 +9,16 @@ LEARNFQDN = adict['learn_rest_fqdn']
 
 def index(request):
     """View function for home page of site."""
+    request.session.flush()  # REMOVE - Just for testing functionality when there is no session.
     bb = BbRest(KEY, SECRET, f"https://{LEARNFQDN}" )
     resp = bb.GetVersion()
+    access_token = bb.get_token()
     version_json = resp.json()
 
     context = {
         'learn_server': LEARNFQDN,
         'version_json' : version_json,
+        'access_token' : access_token,
     }
 
     # Render the HTML template index.html with the data in the context variable

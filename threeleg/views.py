@@ -1,4 +1,6 @@
+from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
 from django.shortcuts import render
+from django.urls import reverse
 from bbrest import BbRest
 from config import adict
 import jsonpickle
@@ -34,6 +36,13 @@ def whoami(request):
         bb_json = jsonpickle.encode(bb)
         print('pickled BbRest putting it on session')
         request.session['bb_json'] = bb_json
+        # The following does maintain the https: scheme if that was used with the incomming request.
+        # BUT because I'm terminating the tls at the ngrok server, my incomming request is http.
+        # Hence the redirect to get_auth_code is http in development. But we want our redirect_uri to be
+        # have a scheme of https so that the Learn server can redirect back through ngrok with our 
+        # secure SSL cert. We'll have to build a redirect_uri with the https scheme in the 
+        # get_auth_code function.
+        return HttpResponseRedirect(reverse('get_auth_code'))
     else:
         print('got BbRest from session')
         bb = jsonpickle.decode(bb_json)
@@ -41,12 +50,53 @@ def whoami(request):
         bb.method_generator()    # unpickling the pickled object.
         print(f'expiration: {bb.expiration()}')
 
-    resp = bb.GetUser("userName:mkauffman")
+    resp = bb.call('GetUser', userId = "me", sync=True ) #Need BbRest to support "me"
     user_json = resp.json()
     context = {
         'user_json': user_json,
-        'user_token': bb.get_token()
+        'access_token': bb.get_token()
     }
     print('views.py index(request) calling render...')
     # Render the HTML template index.html with the data in the context variable
     return render(request, 'whoami.html', context=context)
+
+def get_auth_code(request):
+    # Happens when the user hits whoami the first time and hasn't authenticated on Learn
+    # Part I. Request an authroization code oauth2/authorizationcode
+    print(f"In get_auth_code: REQUEST URI:{request.build_absolute_uri()}")
+    bb_json = request.session.get('bb_json')
+    print('got BbRest from session')
+    bb = jsonpickle.decode(bb_json)
+    bb.supported_functions() # This and the following are required after
+    bb.method_generator()    # unpickling the pickled object. 
+    # The following gives the path to the resource on the server where we are running, 
+    # but not the protocol or host FQDN. We need to prepend those to get an absolute redirect uri.
+    redirect_uri = reverse(get_access_token)
+    absolute_redirect_uri = f"https://{request.get_host()}{redirect_uri}"
+    # absolute_redirect_uri = request.build_absolute_uri(redirect_uri)
+    authcodeurl = bb.get_auth_url(redirect_uri=absolute_redirect_uri)
+    print(f"AUTHCODEURL:{authcodeurl}")
+    return HttpResponseRedirect(authcodeurl)
+
+def get_access_token(request):
+    # Happens when the user hits whoami the first time and hasn't authenticated on Learn
+    # Part II. Get an access token for the user that logged in. Put that on their session.
+    bb_json = request.session.get('bb_json')
+    print('got BbRest from session')
+    bb = jsonpickle.decode(bb_json)
+    bb.supported_functions() # This and the following are required after
+    bb.method_generator()    # unpickling the pickled object.
+    # Next, get the code parameter value from the request
+    redirect_uri = reverse(get_access_token)
+    absolute_redirect_uri = f"https://{request.get_host()}{redirect_uri}"
+    code =  request.GET.get('code', default = None)
+    if (code == None):
+        exit()
+    #Rebuild a new BbRest object to get an access token with the user's authcode.
+    user_bb = BbRest(KEY, SECRET, f"https://{LEARNFQDN}", code=code, redirect_uri=absolute_redirect_uri )
+    bb_json = jsonpickle.encode(user_bb)
+    print('pickled BbRest putting it on session')
+    request.session['bb_json'] = bb_json
+    return HttpResponseRedirect(reverse('whoami'))
+
+
