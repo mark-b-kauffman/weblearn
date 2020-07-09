@@ -12,7 +12,7 @@ def index(request):
     request.session.flush()  # REMOVE - Just for testing functionality when there is no session.
     bb = BbRest(KEY, SECRET, f"https://{LEARNFQDN}" )
     resp = bb.GetVersion()
-    access_token = bb.get_token()
+    access_token = bb.token_info['access_token']
     version_json = resp.json()
 
     context = {

@@ -54,7 +54,7 @@ def whoami(request):
     user_json = resp.json()
     context = {
         'user_json': user_json,
-        'access_token': bb.get_token()
+        'access_token': bb.token_info['access_token']
     }
     print('views.py index(request) calling render...')
     # Render the HTML template index.html with the data in the context variable
