@@ -25,7 +25,7 @@ adict = {
 
 ```
 
-* **learn_rest_fqdn** should be set to your learn instances domain. Be sure to avoid the request scheme, i.e. `mylearn.blackboard.edu`
+* **learn_rest_fqdn** should be set to the FQDN of your Blackboard Learn instance. Be sure to avoid the request scheme, i.e. use `mylearn.blackboard.edu`
 
 * **The Django webserver** should be made available on the public internet with a valid SSL certificate. For development on his local system, the author pays for ngrok forarding to the domain www.avinyet.com with:
 ```
