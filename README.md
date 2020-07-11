@@ -27,6 +27,10 @@ adict = {
 
 * **learn_rest_fqdn** should be set to your learn instances domain. Be sure to avoid the request scheme, i.e. `mylearn.blackboard.edu`
 
+* **The Django webserver** should be made available on the public internet with a valid SSL certificate. For development on his local system, the author pays for ngrok forarding to the domain www.avinyet.com with:
+```
+~/ngrok tls -region=us -hostname=www.avinyet.com -key ~/avinet.rsaprivatekey.pem -crt ~/avinet.fullchaincert.pem 8000
+```
 
 ## To Run
 
