@@ -27,12 +27,11 @@ adict = {
 
 * **learn_rest_fqdn** should be set to the FQDN of your Blackboard Learn instance. Be sure to avoid the request scheme, i.e. use `mylearn.blackboard.edu`
 
-* **The Django webserver** should be made available on the public internet with a valid SSL certificate. For development on his local system, the author pays for ngrok forarding to the domain www.avinyet.com with:
-```
-~/ngrok tls -region=us -hostname=www.avinyet.com -key ~/avinet.rsaprivatekey.pem -crt ~/avinet.fullchaincert.pem 8000
-```
 
 ## To Run
 
-First run `pip install -r requirements.txt` . Next run `python manage.py migrate` to apply the migrations. 
-And last, start the server with `python manage.py runserver`
+* **The Django webserver** should be made available on the public internet with a valid SSL certificate. For development on his local system, the author uses for ngrok to forward from the domain www.avinyet.com to the localhost:8000 with:
+```
+~/ngrok tls -region=us -hostname=www.avinyet.com -key ~/avinet.rsaprivatekey.pem -crt ~/avinet.fullchaincert.pem 8000
+```
+* **After cloning from github,**first run `pip install -r requirements.txt` . Next run `python manage.py migrate` to apply the migrations. And last, start the server with `python manage.py runserver`
