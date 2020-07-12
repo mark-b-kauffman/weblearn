@@ -1,3 +1,4 @@
+from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
 from django.shortcuts import render
 from bbrest import BbRest
 from config import adict
@@ -9,7 +10,7 @@ LEARNFQDN = adict['learn_rest_fqdn']
 
 def index(request):
     """View function for home page of site."""
-    request.session.flush()  # REMOVE - Just for testing functionality when there is no session.
+    # request.session.flush()  # If you uncomment you can use Home to clear out the 3LO token in session.
     bb = BbRest(KEY, SECRET, f"https://{LEARNFQDN}" )
     resp = bb.GetVersion()
     access_token = bb.token_info['access_token']
@@ -23,6 +24,10 @@ def index(request):
 
     # Render the HTML template index.html with the data in the context variable
     return render(request, 'index.html', context=context)
+
+def learnlogout(request):
+    request.session.flush()
+    return HttpResponseRedirect(f"https://{LEARNFQDN}/webapps/login?action=logout")
 
 def getusers(request):
     """View function for getusers page of site."""

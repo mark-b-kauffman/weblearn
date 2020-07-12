@@ -1,0 +1,10 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Get Courses Information From Blackboard Learn</h1>
+  <p>This the courses you have access to in Blackbaord Learn:</em></p>
+  <ul>
+    <li><strong>My Courses JSON:</strong> {{ courses_json }}</li>
+    <li><strong>My User Token:</strong> {{ access_token }}</li>
+  </ul>
+{% endblock %}

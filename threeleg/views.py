@@ -36,6 +36,7 @@ def whoami(request):
         bb_json = jsonpickle.encode(bb)
         print('pickled BbRest putting it on session')
         request.session['bb_json'] = bb_json
+        request.session['target_view'] = 'whoami'
         # The following does maintain the https: scheme if that was used with the incomming request.
         # BUT because I'm terminating the tls at the ngrok server, my incomming request is http.
         # Hence the redirect to get_auth_code is http in development. But we want our redirect_uri to be
@@ -46,6 +47,10 @@ def whoami(request):
     else:
         print('got BbRest from session')
         bb = jsonpickle.decode(bb_json)
+        if bb.is_expired():
+            print('expired token')
+            request.session['bb_json'] = None
+            whoami(request)
         bb.supported_functions() # This and the following are required after
         bb.method_generator()    # unpickling the pickled object.
         print(f'expiration: {bb.expiration()}')
@@ -56,9 +61,40 @@ def whoami(request):
         'user_json': user_json,
         'access_token': bb.token_info['access_token']
     }
-    print('views.py index(request) calling render...')
+
     # Render the HTML template index.html with the data in the context variable
     return render(request, 'whoami.html', context=context)
+
+def courses(request):
+    """View function for courses page of site."""
+    bb_json = request.session.get('bb_json')
+    if (bb_json is None):
+        bb = BbRest(KEY, SECRET, f"https://{LEARNFQDN}" )
+        bb_json = jsonpickle.encode(bb)
+        print('pickled BbRest putting it on session')
+        request.session['bb_json'] = bb_json
+        request.session['target_view'] = 'courses'
+        return HttpResponseRedirect(reverse('get_auth_code'))
+    else:
+        print('got BbRest from session')
+        bb = jsonpickle.decode(bb_json)
+        if bb.is_expired():
+            print('expired token')
+            request.session['bb_json'] = None
+            whoami(request)
+        bb.supported_functions() # This and the following are required after
+        bb.method_generator()    # unpickling the pickled object.
+        print(f'expiration: {bb.expiration()}')
+
+    resp = bb.call('GetCourses', sync=True ) 
+    courses_json = resp.json()
+    context = {
+        'courses_json': courses_json,
+        'access_token': bb.token_info['access_token']
+    }
+
+    # Render the HTML template index.html with the data in the context variable
+    return render(request, 'courses.html', context=context)
 
 def get_auth_code(request):
     # Happens when the user hits whoami the first time and hasn't authenticated on Learn
@@ -82,6 +118,7 @@ def get_access_token(request):
     # Happens when the user hits whoami the first time and hasn't authenticated on Learn
     # Part II. Get an access token for the user that logged in. Put that on their session.
     bb_json = request.session.get('bb_json')
+    target_view = request.session.get('target_view')
     print('got BbRest from session')
     bb = jsonpickle.decode(bb_json)
     bb.supported_functions() # This and the following are required after
@@ -97,6 +134,6 @@ def get_access_token(request):
     bb_json = jsonpickle.encode(user_bb)
     print('pickled BbRest putting it on session')
     request.session['bb_json'] = bb_json
-    return HttpResponseRedirect(reverse('whoami'))
+    return HttpResponseRedirect(reverse(f'{target_view}'))
 
 
