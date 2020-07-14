@@ -36,7 +36,7 @@ def whoami(request):
         bb_json = jsonpickle.encode(bb)
         print('pickled BbRest putting it on session')
         request.session['bb_json'] = bb_json
-        request.session['target_view'] = 'whoami'
+        request.session['target_view'] = 'whoami' # So after we have the access token we know to come back here.
         # The following does maintain the https: scheme if that was used with the incomming request.
         # BUT because I'm terminating the tls at the ngrok server, my incomming request is http.
         # Hence the redirect to get_auth_code is http in development. But we want our redirect_uri to be
