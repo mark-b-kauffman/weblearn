@@ -10,7 +10,7 @@ SECRET = adict['learn_rest_secret']
 LEARNFQDN = adict['learn_rest_fqdn']
 # Create your views here.
 
-def index(request):
+def threeindex(request):
     """View function for home page of site."""
 
     # The following gets/stores the object to access Learn in the user's session.
@@ -26,7 +26,7 @@ def index(request):
     }
 
     # Render the HTML template index.html with the data in the context variable
-    return render(request, 'index.html', context=context)
+    return render(request, 'threeindex.html', context=context)
 
 def whoami(request):
     """View function for whoami page of site."""
