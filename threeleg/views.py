@@ -4,6 +4,7 @@ from django.urls import reverse
 from bbrest import BbRest
 from config import adict
 import jsonpickle
+import uuid
 
 KEY = adict['learn_rest_key']
 SECRET = adict['learn_rest_secret']
@@ -110,7 +111,9 @@ def get_auth_code(request):
     redirect_uri = reverse(get_access_token)
     absolute_redirect_uri = f"https://{request.get_host()}{redirect_uri}"
     # absolute_redirect_uri = request.build_absolute_uri(redirect_uri)
-    authcodeurl = bb.get_auth_url(redirect_uri=absolute_redirect_uri)
+    state = str(uuid.uuid4())
+    request.session['state'] = state
+    authcodeurl = bb.get_auth_url(redirect_uri=absolute_redirect_uri, state=state)
     print(f"AUTHCODEURL:{authcodeurl}")
     return HttpResponseRedirect(authcodeurl)
 
@@ -126,9 +129,15 @@ def get_access_token(request):
     # Next, get the code parameter value from the request
     redirect_uri = reverse(get_access_token)
     absolute_redirect_uri = f"https://{request.get_host()}{redirect_uri}"
+    state = request.GET.get('state', default= "NOSTATE")
+    print(f'GOT BACK state: {state}')
+    stored_state = request.session.get('state')
+    print(f'STORED STATE: {stored_state}')
+    if (stored_state != state):
+        return HttpResponseRedirect(reverse('index'))
     code =  request.GET.get('code', default = None)
     if (code == None):
-        exit()
+        return HttpResponseRedirect(reverse('index'))
     #Rebuild a new BbRest object to get an access token with the user's authcode.
     user_bb = BbRest(KEY, SECRET, f"https://{LEARNFQDN}", code=code, redirect_uri=absolute_redirect_uri )
     bb_json = jsonpickle.encode(user_bb)
