@@ -9,7 +9,7 @@ bs4==0.0.1
 certifi==2019.11.28
 cffi==1.14.0
 chardet==3.0.4
-cryptography==2.8
+cryptography==3.3.2
 cssselect==1.1.0
 dateparser==0.7.6
 distlib==0.3.1
