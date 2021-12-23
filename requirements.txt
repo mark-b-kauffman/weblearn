@@ -47,7 +47,7 @@ sqlparse==0.3.0
 stevedore==2.0.1
 tqdm==4.47.0
 tzlocal==2.1
-urllib3==1.25.8
+urllib3>=1.26.5
 uuid==1.30
 virtualenv==20.0.25
 virtualenv-clone==0.5.4
