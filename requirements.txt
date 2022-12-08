@@ -6,7 +6,7 @@ attrs==19.3.0
 bbrest==0.4.8
 beautifulsoup4==4.9.1
 bs4==0.0.1
-certifi==2019.11.28
+certifi==2022.12.7
 cffi==1.14.0
 chardet==3.0.4
 cryptography>=3.2
